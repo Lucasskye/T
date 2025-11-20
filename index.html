@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Merry Christmas 2025</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at top, #001018, #000 70%);
+        font-family: monospace;
+        color: white;
+        text-align: center;
+    }
+
+    canvas {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        left: 0;
+        top: 0;
+        z-index: 1;
+    }
+
+    #tree {
+        position: absolute;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 420px;
+        z-index: 2;
+    }
+
+    #tree path {
+        stroke: #00ff86;
+        stroke-width: 4px;
+        fill: none;
+        stroke-linecap: round;
+        filter: drop-shadow(0 0 8px #00ff86);
+        stroke-dasharray: 2200;
+        stroke-dashoffset: 2200;
+        animation: draw 5s ease forwards;
+    }
+
+    @keyframes draw {
+        from { stroke-dashoffset: 2200; }
+        to { stroke-dashoffset: 0; }
+    }
+
+    .light {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        animation: blink 1.4s infinite;
+        z-index: 3;
+    }
+
+    @keyframes blink {
+        0% { opacity: .3; transform: scale(.8); }
+        50% { opacity: 1; transform: scale(1.4); }
+        100% { opacity: .4; transform: scale(1); }
+    }
+
+    #star {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        filter: drop-shadow(0 0 12px gold);
+        animation: pulsee 2s infinite;
+        z-index: 4;
+    }
+
+    @keyframes pulsee {
+        50% { transform: translateX(-50%) scale(1.2); opacity: .7; }
+    }
+
+    #msg {
+        position: absolute;
+        bottom: 40px;
+        width: 100%;
+        font-size: 36px;
+        color: #a3ecff;
+        text-shadow: 0 0 12px #7beaff;
+        z-index: 4;
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="snow"></canvas>
+
+<!-- BINTANG -->
+<img id="star" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Star_icon-72a7cf.svg/1024px-Star_icon-72a7cf.svg.png">
+
+<!-- POHON (PATH MIRIP CONTOH ASLI) -->
+<svg id="tree" viewBox="0 0 400 600">
+    <path id="treePath"
+          d="M200 20
+           C160 60, 260 90, 180 130
+           C110 170, 280 210, 150 260
+           C70 300, 300 340, 140 400
+           C50 450, 330 500, 200 580" />
+</svg>
+
+<div id="msg">Merry Christmas 2025</div>
+
+<script>
+// ——— SALJU ———
+const c = document.getElementById("snow");
+const ctx = c.getContext("2d");
+c.width = innerWidth;
+c.height = innerHeight;
+let flakes = [];
+for (let i = 0; i < 180; i++)
+    flakes.push({x: Math.random()*c.width, y: Math.random()*c.height, r: Math.random()*3+1, s: Math.random()*2+1});
+
+function snow(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle="white";
+    flakes.forEach(f=>{
+        ctx.beginPath();
+        ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+        ctx.fill();
+        f.y+=f.s;
+        if(f.y>c.height){f.y=-5; f.x=Math.random()*c.width;}
+    });
+    requestAnimationFrame(snow);
+}
+snow();
+
+// ——— LAMPU DI SEPANJANG PATH ———
+let tree = document.getElementById("treePath");
+let len = tree.getTotalLength();
+let colors = ["red","yellow","gold","orange","lime","cyan"];
+
+for(let i=0;i<60;i++){
+    let p = tree.getPointAtLength((len/60)*i);
+    let d = document.createElement("div");
+    d.className = "light";
+    d.style.left = (p.x + 50) + "px";
+    d.style.top = (p.y + 90) + "px";
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDelay = (Math.random()*1.5)+"s";
+    document.body.appendChild(d);
+}
+</script>
+
+</body>
+</html>
